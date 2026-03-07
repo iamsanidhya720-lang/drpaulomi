@@ -5,18 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Be My Valentine 💘</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
@@ -36,7 +29,99 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Card */
+    /* ── STARTUP POPUP OVERLAY ── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 28, 47, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .popup-box {
+      width: min(88%, 380px);
+      padding: 40px 32px 36px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      text-align: center;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.28),
+        inset 0 0 0 1px rgba(255,255,255,0.45);
+      position: relative;
+      animation: popIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.75); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .popup-box::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 30px;
+      background: linear-gradient(120deg, #ff4d6d, #ff9a9e, #fbc2eb);
+      z-index: -1;
+      filter: blur(20px);
+      opacity: 0.7;
+    }
+
+    .popup-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+      animation: heartbeat 1.8s infinite;
+    }
+
+    .popup-box h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      color: #4a1c2f;
+      line-height: 1.4;
+      margin-bottom: 22px;
+    }
+
+    .popup-box h3 span {
+      display: block;
+      font-size: 15px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      color: #a0556e;
+      margin-top: 6px;
+    }
+
+    .popup-btn {
+      padding: 13px 38px;
+      border-radius: 40px;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff4d6d, #ff758f);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(255,77,109,0.5);
+      transition: all 0.25s ease;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .popup-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(255,77,109,0.65);
+    }
+
+    .popup-btn:active { transform: scale(0.95); }
+
+    /* ── MAIN CARD ── */
     .card {
       width: min(92%, 420px);
       padding: 40px 30px 45px;
@@ -53,10 +138,9 @@
 
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Glow ring */
     .card::before {
       content: "";
       position: absolute;
@@ -76,9 +160,9 @@
 
     @keyframes heartbeat {
       0%,100% { transform: scale(1); }
-      25% { transform: scale(1.08); }
-      50% { transform: scale(1); }
-      75% { transform: scale(1.12); }
+      25%      { transform: scale(1.08); }
+      50%      { transform: scale(1); }
+      75%      { transform: scale(1.12); }
     }
 
     h2 {
@@ -106,9 +190,7 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
-    button:active {
-      transform: scale(0.94);
-    }
+    button:active { transform: scale(0.94); }
 
     #yes {
       left: 12%;
@@ -135,7 +217,6 @@
       font-style: italic;
     }
 
-    /* Floating depth hearts */
     .heart {
       position: absolute;
       bottom: -20px;
@@ -145,29 +226,35 @@
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-120vh) scale(1.8);
-        opacity: 0;
-      }
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to   { transform: translateY(-120vh) scale(1.8); opacity: 0; }
     }
 
-    /* Responsive */
     @media (max-width: 480px) {
       h2 { font-size: 23px; }
       .emoji { font-size: 58px; }
       button { padding: 12px 28px; font-size: 15px; }
       #yes { left: 8%; }
-      #no { left: 55%; }
+      #no  { left: 55%; }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- STARTUP POPUP -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box">
+      <div class="popup-icon">💻✨</div>
+      <h3>
+        Psst, a little secret...
+        <span>Cool people open this link on a laptop 😏</span>
+      </h3>
+      <button class="popup-btn" onclick="closePopup()">okay fine 💅</button>
+    </div>
+  </div>
+
+  <!-- MAIN CARD -->
   <div class="card">
     <div class="emoji">🐱❤️</div>
     <h2>Aditi,<br>will you be my Valentine?</h2>
@@ -180,40 +267,40 @@
     <div class="hint">Some love stories don't allow "no" ✨</div>
   </div>
 
-  <!-- Sounds -->
   <audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"></audio>
-  <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+  <audio id="yesSound"   src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
   <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const card = document.querySelector(".card");
+    function closePopup() {
+      const overlay = document.getElementById("popupOverlay");
+      overlay.style.transition = "opacity 0.35s ease";
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.remove(), 350);
+    }
+
+    const noBtn      = document.getElementById("no");
+    const yesBtn     = document.getElementById("yes");
+    const card       = document.querySelector(".card");
     const hoverSound = document.getElementById("hoverSound");
-    const yesSound = document.getElementById("yesSound");
+    const yesSound   = document.getElementById("yesSound");
 
     noBtn.addEventListener("mouseenter", () => {
       hoverSound.currentTime = 0;
       hoverSound.play();
 
       const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+      const btnRect  = noBtn.getBoundingClientRect();
 
-      const maxX = cardRect.width - btnRect.width - 10;
+      const maxX = cardRect.width  - btnRect.width  - 10;
       const maxY = cardRect.height - btnRect.height - 10;
 
       noBtn.style.left = Math.random() * maxX + "px";
-      noBtn.style.top = Math.random() * maxY + "px";
+      noBtn.style.top  = Math.random() * maxY + "px";
     });
 
     yesBtn.addEventListener("click", () => {
       yesSound.play();
-
-      confetti({
-        particleCount: 260,
-        spread: 120,
-        origin: { y: 0.65 }
-      });
-
+      confetti({ particleCount: 260, spread: 120, origin: { y: 0.65 } });
       setTimeout(() => {
         window.location.href = "https://www.instagram.com";
       }, 1000);
@@ -223,11 +310,10 @@
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💗";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 22 + 14 + "px";
+      heart.style.left              = Math.random() * 100 + "vw";
+      heart.style.fontSize          = Math.random() * 22 + 14 + "px";
       heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-      heart.style.opacity = Math.random() * 0.5 + 0.4;
-
+      heart.style.opacity           = Math.random() * 0.5 + 0.4;
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 8000);
     }
